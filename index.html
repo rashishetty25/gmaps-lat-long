@@ -71,7 +71,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px; /* Increased margin between the URL sections */
+            margin-bottom: 15px;
         }
         .url-container a {
             flex: 1;
@@ -84,7 +84,6 @@
 <div class="container">
     <h2>Convert Lat Long to Google Maps URL</h2>
 
-    <!-- Latitude input row -->
     <div class="input-row">
         <div>
             <label for="latDeg"></label>
@@ -107,7 +106,6 @@
         </div>
     </div>
 
-    <!-- Longitude input row -->
     <div class="input-row">
         <div>
             <label for="lonDeg"></label>
@@ -129,16 +127,13 @@
             </select>
         </div>
     </div>
-    <!-- Single button to create URLs -->
-    <button onclick="convert()">Create URLs</button>
+    <button onclick="convert()">Get URL</button>
 
-    <!-- Display result -->
     <div class="result" id="result"></div>
 </div>
 
 <script>
     function convert() {
-        // Get input values
         const latDeg = parseFloat(document.getElementById('latDeg').value);
         const latMin = parseFloat(document.getElementById('latMin').value);
         const latSec = parseFloat(document.getElementById('latSec').value);
@@ -149,27 +144,21 @@
         const lonSec = parseFloat(document.getElementById('lonSec').value);
         const lonDir = document.getElementById('lonDir').value;
 
-        // Check if inputs are valid
         if (isNaN(latDeg) || isNaN(latMin) || isNaN(latSec) || isNaN(lonDeg) || isNaN(lonMin) || isNaN(lonSec)) {
             alert('Please enter valid numbers.');
             return;
         }
 
-        // Convert DMS to decimal degrees
         const latitude = latDeg + (latMin / 60) + (latSec / 3600);
         const longitude = lonDeg + (lonMin / 60) + (lonSec / 3600);
 
-        // Adjust for N/S and E/W
         const latFinal = latDir === 'S' ? -latitude : latitude;
         const lonFinal = lonDir === 'W' ? -longitude : longitude;
 
-        // Format Google Maps URL
         const mapsUrl = `https://www.google.com/maps?q=${latFinal},${lonFinal}`;
 
-        // Format Nominatim URL
         const nominatimUrl = `https://nominatim.openstreetmap.org/ui/reverse.html?lat=${latFinal}&lon=${lonFinal}`;
 
-        // Display the result
         document.getElementById('result').innerHTML = `
             <div class="url-container">
                 <a href="${mapsUrl}" target="_blank">${mapsUrl}</a>
@@ -183,7 +172,6 @@
     }
 
     function copyToClipboard(url) {
-        // Create a temporary text area to copy the URL
         const tempTextArea = document.createElement('textarea');
         tempTextArea.value = url;
         document.body.appendChild(tempTextArea);
@@ -191,7 +179,6 @@
         document.execCommand('copy');
         document.body.removeChild(tempTextArea);
 
-        // Alert user that the URL has been copied
         alert('URL copied to clipboard!');
     }
 </script>
