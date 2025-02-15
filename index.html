@@ -46,13 +46,36 @@
             font-size: 14px;
         }
         button:hover {
-            background-color: #45a049;
+            background-color: #74537E;
         }
         .result {
             background-color: #f0f0f0;
             padding: 10px;
             border-radius: 5px;
             margin-top: 20px;
+        }
+        .copy-button {
+            padding: 3px 7px;
+            background-color: #ccc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+            width: auto;
+        }
+        .copy-button:hover {
+            background-color: #999;
+        }
+        .url-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px; /* Increased margin between the URL sections */
+        }
+        .url-container a {
+            flex: 1;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -106,16 +129,15 @@
             </select>
         </div>
     </div>
-
-    <!-- Single button to create URL and copy -->
-    <button onclick="convertAndCopy()">Create and Copy Google Maps URL</button>
+    <!-- Single button to create URLs -->
+    <button onclick="convert()">Create URLs</button>
 
     <!-- Display result -->
     <div class="result" id="result"></div>
 </div>
 
 <script>
-    function convertAndCopy() {
+    function convert() {
         // Get input values
         const latDeg = parseFloat(document.getElementById('latDeg').value);
         const latMin = parseFloat(document.getElementById('latMin').value);
@@ -144,19 +166,33 @@
         // Format Google Maps URL
         const mapsUrl = `https://www.google.com/maps?q=${latFinal},${lonFinal}`;
 
-        // Display the result
-        document.getElementById('result').innerHTML = `<p><strong>Google Maps URL:</strong> <a href="${mapsUrl}" target="_blank">${mapsUrl}</a></p>`;
+        // Format Nominatim URL
+        const nominatimUrl = `https://nominatim.openstreetmap.org/ui/reverse.html?lat=${latFinal}&lon=${lonFinal}`;
 
-        // Copy the URL to clipboard
+        // Display the result
+        document.getElementById('result').innerHTML = `
+            <div class="url-container">
+                <a href="${mapsUrl}" target="_blank">${mapsUrl}</a>
+                <button class="copy-button" onclick="copyToClipboard('${mapsUrl}')">Copy</button>
+            </div>
+            <div class="url-container">
+                <a href="${nominatimUrl}" target="_blank">${nominatimUrl}</a>
+                <button class="copy-button" onclick="copyToClipboard('${nominatimUrl}')">Copy</button>
+            </div>
+        `;
+    }
+
+    function copyToClipboard(url) {
+        // Create a temporary text area to copy the URL
         const tempTextArea = document.createElement('textarea');
-        tempTextArea.value = mapsUrl;
+        tempTextArea.value = url;
         document.body.appendChild(tempTextArea);
         tempTextArea.select();
         document.execCommand('copy');
         document.body.removeChild(tempTextArea);
 
         // Alert user that the URL has been copied
-        alert('Google Maps URL has been copied to clipboard!');
+        alert('URL copied to clipboard!');
     }
 </script>
 
